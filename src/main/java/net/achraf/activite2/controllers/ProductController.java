@@ -1,5 +1,6 @@
 package net.achraf.activite2.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.achraf.activite2.model.Product;
 import net.achraf.activite2.repository.ProductRepository;
@@ -56,6 +57,17 @@ public class ProductController {
     @GetMapping("/not-authorized")
     public String notAuthorized(Model model) {
        return "notAuthorized";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession httpSession) {
+        httpSession.invalidate();
+        return "login";
     }
 
 }
