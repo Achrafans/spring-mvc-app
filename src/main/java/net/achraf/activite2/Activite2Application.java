@@ -39,6 +39,48 @@ public class Activite2Application {
                     .price(1300)
                     .quantity(33)
                     .build());
+            productRepository.save(Product.builder()
+                    .name("Tablet")
+                    .description("Tablet description")
+                    .price(2300)
+                    .quantity(25)
+                    .build());
+
+            productRepository.save(Product.builder()
+                    .name("Monitor")
+                    .description("Full HD monitor 24 inches")
+                    .price(1500)
+                    .quantity(20)
+                    .build());
+
+            productRepository.save(Product.builder()
+                    .name("Keyboard")
+                    .description("Mechanical keyboard with RGB")
+                    .price(500)
+                    .quantity(40)
+                    .build());
+
+            productRepository.save(Product.builder()
+                    .name("Mouse")
+                    .description("Wireless ergonomic mouse")
+                    .price(300)
+                    .quantity(35)
+                    .build());
+
+            productRepository.save(Product.builder()
+                    .name("Headphones")
+                    .description("Noise-cancelling headphones")
+                    .price(800)
+                    .quantity(18)
+                    .build());
+
+            productRepository.save(Product.builder()
+                    .name("Webcam")
+                    .description("HD webcam with microphone")
+                    .price(600)
+                    .quantity(22)
+                    .build());
+
 
             productRepository.findAll().forEach(p-> System.out.println(p.toString()));
         };

@@ -34,10 +34,14 @@
             <td th:text="${p.price}"></td>
             <td th:text="${p.quantity}"></td>
             <td sec:authorize="hasRole('ADMIN')">
-                <form method="post" th:action="@{/admin/delete(id=${p.id})}">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                <div class="d-flex">
+                    <form method="post" th:action="@{/admin/delete(id=${p.id})}" onsubmit="return confirm('Êtes-vous sûr ?');" class="me-2">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a th:href="@{'/admin/update/' + ${p.id}}" class="btn btn-primary">Update</a>
+                </div>
             </td>
+
         </tr>
         </tbody>
     </table>
