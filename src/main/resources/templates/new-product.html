@@ -10,7 +10,8 @@
 </head>
 <body>
 <div class="p-3" layout:fragment="content">
-  <form method="post" th:action="@{/admin/saveProduct}">
+  <form method="post" th:action="${product.id} != null ? '/admin/updateProduct' : '/admin/saveProduct'">
+    <input type="hidden" name="id" th:value="${product.id}" />
     <div class="mb-3">
       <label class="form-label">Name</label>
       <input class="form-control" type="text" name="name" th:value="${product.name}"/>
@@ -36,7 +37,7 @@
       <span class="text-danger" th:errors="${product.quantity}"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary" th:text="${product.id} != null ? 'Mettre à jour' : 'Enregistrer'"></button>
 
 
   </form>

@@ -9,12 +9,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ProductController {
@@ -58,6 +56,43 @@ public class ProductController {
         return "redirect:/admin/newProduct";
 
     }
+
+    @PostMapping("/admin/updateProduct")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String updateProduct(@Valid Product updatedProduct, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()){
+            return "new-product";
+        }
+
+        Optional<Product> updatedProductOptional = productRepository.findById(updatedProduct.getId());
+        if (updatedProductOptional.isEmpty()){
+            model.addAttribute("error", "Produit non trouvé.");
+            return "error";
+        }
+        Product existingProduct = updatedProductOptional.get();
+        existingProduct.setName(updatedProduct.getName());
+        existingProduct.setDescription(updatedProduct.getDescription());
+        existingProduct.setPrice(updatedProduct.getPrice());
+        existingProduct.setQuantity(updatedProduct.getQuantity());
+
+        productRepository.save(existingProduct);
+
+        return "redirect:/user/index";
+    }
+
+    @GetMapping("/admin/update/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isEmpty()) {
+            model.addAttribute("error", "Produit non trouvé.");
+            return "error";
+        }
+
+        model.addAttribute("product", optionalProduct.get());
+        return "new-product";
+    }
+
 
     @GetMapping("/not-authorized")
     public String notAuthorized(Model model) {
