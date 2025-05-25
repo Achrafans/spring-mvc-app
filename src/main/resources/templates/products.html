@@ -9,6 +9,12 @@
     <meta charset="UTF-8">
     <title>Products</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+
+    <style>
+        a.disabled {
+            pointer-events: none;
+        }
+    </style>
 </head>
 <body>
 <div class="p-3" layout:fragment="content" >
@@ -27,7 +33,7 @@
         </thead>
 
         <tbody>
-        <tr th:each="p:${productList}">
+        <tr th:each="p:${productPage.content}">
             <td th:text="${p.id}"></td>
             <td th:text="${p.name}"></td>
             <td th:text="${p.description}"></td>
@@ -45,6 +51,28 @@
         </tr>
         </tbody>
     </table>
+    <!-- Pagination -->
+    <div>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link"
+                     th:href="@{/user/index(page=${currentPage - 1}, size=${productPage.size})}"
+                     th:classappend="${currentPage <= 0 ? 'disabled': ''}">Previous</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a class="page-link" th:href="@{/user/index(page=${i}, size=${productPage.size})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == currentPage} ? 'active'">Page</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:classappend="${currentPage + 1 >= totalPages ? 'disabled': ''}" th:href="@{/user/index(page=${currentPage + 1}, size=${productPage.size})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
 
 </body>

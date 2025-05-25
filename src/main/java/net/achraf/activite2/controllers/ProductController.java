@@ -5,6 +5,9 @@ import jakarta.validation.Valid;
 import net.achraf.activite2.model.Product;
 import net.achraf.activite2.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,10 +29,19 @@ public class ProductController {
 
     @GetMapping("/user/index")
     @PreAuthorize("hasRole('USER')")
-    public String index(Model model) {
-        List<Product> products = productRepository.findAll();
-        model.addAttribute("productList", products);
-       return "products";
+    public String index(
+            Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAll(pageable);
+
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+
+        return "products";
     }
 
     @PostMapping("/admin/delete")
